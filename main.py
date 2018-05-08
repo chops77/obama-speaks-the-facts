@@ -21,7 +21,9 @@ def get_fact():
 def home():
     fact = get_fact().strip()
     body = requests.post('http://hidden-journey-62459.herokuapp.com/piglatinize/', data = {'input_text': fact})
-    return Response(response = body, mimetype = 'text/html')
+    location = body.history[0].headers['Location']
+    new_body = body.content.decode('utf8').replace('</body>', '\t<br/>\n\t<br/>\n\t<a href="{}" target="_blank">Original Link</a>\n\n</body>'.format(location))
+    return Response(response = new_body, mimetype = 'text/html')
 
 
 if __name__ == "__main__":
